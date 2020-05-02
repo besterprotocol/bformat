@@ -3,7 +3,7 @@ module bmessage;
 import std.socket : Socket, SocketFlags;
 import std.json : JSONValue, parseJSON, toJSON;
 
-private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMessage)
+public bool receiveMessage_internal(Socket originator, ref JSONValue receiveMessage)
 {
 	/* Construct a buffer to receive into */
 	byte[] receiveBuffer;
@@ -111,7 +111,7 @@ private bool receiveMessage_internal(Socket originator, ref JSONValue receiveMes
 	return true;
 }
 
-private bool sendMessage_internal(Socket recipient, JSONValue jsonMessage)
+public bool sendMessage_internal(Socket recipient, JSONValue jsonMessage)
 {
 	/* The message buffer */
 	byte[] messageBuffer;
