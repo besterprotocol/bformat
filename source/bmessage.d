@@ -3,7 +3,7 @@ module bmessage;
 import std.socket : Socket, SocketFlags;
 import std.json : JSONValue, parseJSON, toJSON;
 
-public bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
+public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 {
 	/* Construct a buffer to receive into */
 	byte[] receiveBuffer;
@@ -106,18 +106,15 @@ public bool receiveMessage(Socket originator, ref JSONValue receiveMessage)
 	// writeln("Message ", fullMessage);
 
 	/* Set the message in `receiveMessage */
-	receiveMessage = parseJSON(cast(string)fullMessage);
+	receiveMessage = fullMessage;
 
 	return true;
 }
 
-public bool sendMessage(Socket recipient, JSONValue jsonMessage)
+public bool sendMessage(Socket recipient, byte[] message)
 {
 	/* The message buffer */
 	byte[] messageBuffer;
-
-	/* Get the JSON as a string */
-	string message = toJSON(jsonMessage);
 
 	/* Encode the 4 byte message length header (little endian) */
 	int payloadLength = cast(int)message.length;
