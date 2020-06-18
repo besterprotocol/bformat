@@ -3,8 +3,8 @@
 		"Tristan B. Kildaire"
 	],
 	"copyright": "Copyright © 2020, Tristan B. Kildaire",
-	"description": "A minimal D application.",
-	"license": "proprietary",
+	"description": "bformat socket writer and reader",
+	"license": "GPL v3",
 	"name": "bformat",
 	"targetType": "library"
 }
