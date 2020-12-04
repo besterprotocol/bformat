@@ -41,8 +41,28 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 	}
 
 	/* Response message length */
-	int messageLength = *cast(int*)receiveBuffer.ptr;
+	int messageLength;
 	// writeln("Message length is: ", cast(uint)messageLength);
+
+	/* Little endian version you simply read if off the bone (it's already in the correct order) */
+	version(LittleEndian)
+	{
+		messageLength = *cast(int*)receiveBuffer.ptr;
+	}
+
+	/* Big endian requires we byte-sapped the little-endian encoded number */
+	version(BigEndian)
+	{
+		byte[] swappedLength;
+		swappedLength.length = 4;
+
+		swappedLength[0] = receiveBuffer[3];
+		swappedLength[1] = receiveBuffer[2];
+		swappedLength[2] = receiveBuffer[1];
+		swappedLength[3] = receiveBuffer[0];
+
+		messageLength = *cast(int*)swappedLength.ptr;
+	}
 
 	/* Response message buffer */
 	byte[] fullMessage;
