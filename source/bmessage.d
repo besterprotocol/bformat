@@ -1,44 +1,15 @@
 module bmessage;
 
-import std.socket : Socket, SocketFlags;
+import std.socket : Socket, SocketFlags, MSG_WAITALL;
 
 public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 {
 	/* Construct a buffer to receive into */
 	byte[] receiveBuffer;
 
-	/* The current byte */
-	uint currentByte = 0;
-
-	/* The amount of bytes received */
-	long bytesReceived;
-
-	/* Loop consume the next 4 bytes */
-	while(currentByte < 4)
-	{
-		/* Temporary buffer */
-		byte[4] tempBuffer;
-
-		/* Read at-most 4 bytes */
-		bytesReceived = originator.receive(tempBuffer);
-
-		/* If there was an error reading from the socket */
-		if(!(bytesReceived > 0))
-		{
-			/* TODO: Error handling */
-			// debugPrint("Error receiving from socket");
-			return false;
-		}
-		/* If there is no error reading from the socket */
-		else
-		{
-			/* Add the read bytes to the *real* buffer */
-			receiveBuffer ~= tempBuffer[0..bytesReceived];
-
-			/* Increment the byte counter */
-			currentByte += bytesReceived;
-		}
-	}
+	/* Read 4 bytes of length */
+	receiveBuffer.length = 4;
+	originator.receive(receiveBuffer, cast(SocketFlags)MSG_WAITALL);
 
 	/* Response message length */
 	int messageLength;
@@ -64,68 +35,13 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 		messageLength = *cast(int*)swappedLength.ptr;
 	}
 
-	/* Response message buffer */
-	byte[] fullMessage;
+	/* Reset buffer */
+	receiveBuffer.length = cast(uint)messageLength;
 
-	/* Reset the byte counter */
-	currentByte = 0;
-
-	while(currentByte < messageLength)
-	{
-		/**
-		 * Receive 20 bytes (at most) at a time and don't dequeue from
-		 * the kernel's TCP stack's buffer.
-		 */
-		byte[20] tempBuffer;
-		bytesReceived = originator.receive(tempBuffer, SocketFlags.PEEK);
-
-		/* Check for an error whilst receiving */
-		if(!(bytesReceived > 0))
-		{
-			/* TODO: Error handling */
-			// debugPrint("Error whilst receiving from socket");
-			return false;
-		}
-		else
-		{
-			/* TODO: Make sure we only take [0, messageLength) bytes */
-			if(cast(uint)bytesReceived+currentByte > messageLength)
-			{
-				byte[] remainingBytes;
-				remainingBytes.length = messageLength-currentByte;
-
-				/* Receive the remaining bytes */
-				originator.receive(remainingBytes);
-
-				/* Increment counter of received bytes */
-				currentByte += remainingBytes.length;
-
-				/* Append the received bytes to the FULL message buffer */
-				fullMessage ~= remainingBytes;
-
-				// writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");
-			}
-			else
-			{
-				/* Increment counter of received bytes */
-				currentByte += bytesReceived;
-	
-				/* Append the received bytes to the FULL message buffer */
-				fullMessage ~= tempBuffer[0..bytesReceived];
-
-				/* TODO: Bug when over send, we must not allow this */
-				// writeln("Received ", currentByte, "/", cast(uint)messageLength, " bytes");	
-
-				/* Dequeue the received bytes */
-				originator.receive(tempBuffer);
-			}
-		}
-	}
+	/* Read the full message */
+	originator.receive(receiveBuffer, cast(SocketFlags)MSG_WAITALL);
 
 	// writeln("Message ", fullMessage);
-
-	/* Set the message in `receiveMessage */
-	receiveMessage = fullMessage;
 
 	return true;
 }
