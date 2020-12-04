@@ -61,8 +61,8 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 		messageLength = *cast(int*)swappedLength.ptr;
 	}
 
-	/* Reset buffer */
-	receiveBuffer.length = cast(uint)messageLength;
+	/* Full message buffer Reset buffer */
+	byte[] fullMessage;
 
 	/* Reset the byte counter */
 	currentByte = 0;
