@@ -25,8 +25,6 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 		/* If there was an error reading from the socket */
 		if(!(bytesReceived > 0))
 		{
-			/* TODO: Error handling */
-			// debugPrint("Error receiving from socket");
 			return false;
 		}
 		/* If there is no error reading from the socket */
@@ -42,7 +40,6 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 
 	/* Response message length */
 	int messageLength;
-	// writeln("Message length is: ", cast(uint)messageLength);
 
 	/* Little endian version you simply read if off the bone (it's already in the correct order) */
 	version(LittleEndian)
@@ -82,13 +79,10 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 		/* Check for an error whilst receiving */
 		if(!(bytesReceived > 0))
 		{
-			/* TODO: Error handling */
-			// debugPrint("Error whilst receiving from socket");
 			return false;
 		}
 		else
 		{
-			/* TODO: Make sure we only take [0, messageLength) bytes */
 			if(cast(uint)bytesReceived+currentByte > messageLength)
 			{
 				byte[] remainingBytes;
@@ -121,8 +115,6 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 			}
 		}
 	}
-
-	// writeln("Message ", fullMessage);
 
 	/* Set the message in `receiveMessage */
 	receiveMessage = fullMessage;
