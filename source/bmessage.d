@@ -138,10 +138,25 @@ public bool sendMessage(Socket recipient, byte[] message)
 	/* Encode the 4 byte message length header (little endian) */
 	int payloadLength = cast(int)message.length;
 	byte* lengthBytes = cast(byte*)&payloadLength;
-	messageBuffer ~= *(lengthBytes+0);
-	messageBuffer ~= *(lengthBytes+1);
-	messageBuffer ~= *(lengthBytes+2);
-	messageBuffer ~= *(lengthBytes+3);
+
+	/* On little endian simply get the bytes as is (it would be encoded as little endian) */
+	version(LittleEndian)
+	{
+		messageBuffer ~= *(lengthBytes+0);
+		messageBuffer ~= *(lengthBytes+1);
+		messageBuffer ~= *(lengthBytes+2);
+		messageBuffer ~= *(lengthBytes+3);
+	}
+
+	/* On Big Endian you must swap the big-endian-encoded number to be in little endian ordering */
+	version(BigEndian)
+	{
+		messageBuffer ~= *(lengthBytes+3);
+		messageBuffer ~= *(lengthBytes+2);
+		messageBuffer ~= *(lengthBytes+1);
+		messageBuffer ~= *(lengthBytes+0);
+	}
+	
 
 	/* Add the message to the buffer */
 	messageBuffer ~= cast(byte[])message;
