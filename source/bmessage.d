@@ -2,6 +2,44 @@ module bmessage;
 
 import std.socket : Socket, SocketFlags, MSG_WAITALL;
 
+public byte[] decodeMessage(byte[] bformatBytes)
+{
+	/* Construct a buffer to receive into */
+	byte[] receiveBuffer;
+
+	/* Get the length of the message */
+	byte[4] messageLengthBytes = bformatBytes[0..4];
+
+	/* Response message length */
+	uint messageLength;
+
+	/* Little endian version you simply read if off the bone (it's already in the correct order) */
+	version(LittleEndian)
+	{
+		messageLength = *cast(int*)messageLengthBytes.ptr;
+	}
+
+	/* Big endian requires we byte-sapped the little-endian encoded number */
+	version(BigEndian)
+	{
+		byte[] swappedLength;
+		swappedLength.length = 4;
+
+		swappedLength[0] = messageLengthBytes[3];
+		swappedLength[1] = messageLengthBytes[2];
+		swappedLength[2] = messageLengthBytes[1];
+		swappedLength[3] = messageLengthBytes[0];
+
+		messageLength = *cast(int*)swappedLength.ptr;
+	}
+
+
+	/* Read the full message */
+	receiveBuffer = bformatBytes[4..4+messageLength];
+
+	return receiveBuffer;
+}
+
 public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 {
 	/* Construct a buffer to receive into */
