@@ -177,3 +177,33 @@ public bool sendMessage(Socket recipient, byte[] message)
 	/* TODO: Compact this */
 	return bytesSent > 0;
 }
+
+/* TODO: Make this test encoding etc. (URGENT TEST CASE TO ADD) */
+unittest
+{
+	Socket servServ = new Socket(AddressFamily.INET, SocketType.STREAM, ProtocolType.TCP);
+	servServ.bind(parseAddress("127.0.0.1", 0));
+
+	ushort serverPort = to!(ushort)(servServ.localAddress.toPortString());
+
+	class Client : Thread
+	{
+		Socket client;
+		this(Socket client)
+		{
+			super(&worker);
+			this.client = client;
+			start();
+		}
+
+		private void worker()
+		{
+
+		}
+	}
+
+	while(true)
+	{
+		servServ.accept().
+	}
+}
