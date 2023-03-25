@@ -2,6 +2,7 @@
 	"authors": [
 		"Tristan B. Velloza Kildaire"
 	],
+	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
 	"description": "bformat socket writer and reader",
 	"license": "LGPL v3",
