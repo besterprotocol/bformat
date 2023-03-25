@@ -16,3 +16,14 @@ public import bformat.sockets : sendMessage;
  * the provided array
  */
 public import bformat.sockets : receiveMessage;
+
+/**
+ * Encodes the provided message into the bformat format
+ */
+public import bformat.marshall : encodeBformat;
+
+/**
+ * Decodes the provided bformat message into the
+ * message itself
+ */
+public import bformat.marshall : decodeMessage;
