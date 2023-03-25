@@ -1,10 +1,12 @@
 module bformat.marshall;
 
 /** 
- * 
+ * Decodes the provided bformat message into the
+ * message itself
+ *
  * Params:
- *   bformatBytes = 
- * Returns: 
+ *   bformatBytes = the bformat payload the decode
+ * Returns: the decoded message
  */
 public byte[] decodeMessage(byte[] bformatBytes)
 {
@@ -45,10 +47,11 @@ public byte[] decodeMessage(byte[] bformatBytes)
 }
 
 /** 
- * 
+ * Encodes the provided message into the bformat format
+ *
  * Params:
- *   message = 
- * Returns: 
+ *   message = the buffer containing bytes to encode
+ * Returns: the encoded payload
  */
 public byte[] encodeBformat(byte[] message)
 {
