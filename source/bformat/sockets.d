@@ -76,11 +76,14 @@ public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 }
 
 /** 
- * 
+ * Encodes the provided message into the bformat format
+ * and sends it over the provided socket
+ *
  * Params:
- *   recipient = 
- *   message = 
- * Returns: 
+ *   recipient = the socket to send over
+ *   message = the message to encode and send
+ *
+ * Returns: true if the send succeeded, false otherwise
  */
 public bool sendMessage(Socket recipient, byte[] message)
 {
