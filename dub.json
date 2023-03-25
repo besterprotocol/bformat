@@ -4,7 +4,7 @@
 	],
 	"copyright": "Copyright © 2020, Tristan B. Kildaire",
 	"description": "bformat socket writer and reader",
-	"license": "GPL v3",
+	"license": "LGPL v3",
 	"name": "bformat",
 	"targetType": "library"
 }
