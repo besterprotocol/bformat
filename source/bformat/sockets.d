@@ -1,3 +1,6 @@
+/** 
+ * Socket encoding/decoding functions
+ */
 module bformat.sockets;
 
 import std.socket : Socket, SocketFlags, MSG_WAITALL;
