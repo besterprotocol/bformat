@@ -1,3 +1,6 @@
+/**
+ * Standalone encoding/decoding functions
+ */
 module bformat.marshall;
 
 /** 
