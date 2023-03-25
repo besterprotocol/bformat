@@ -89,3 +89,19 @@ public byte[] encodeBformat(byte[] message)
 
 	return messageBuffer;
 }
+
+version(unittest)
+{
+    import std.string : cmp;
+}
+
+unittest
+{
+    string message = "This is my message";
+    byte[] bformatEncoded = encodeBformat(cast(byte[])message);
+
+    byte[] decodedMessageBytes = decodeMessage(bformatEncoded);
+    string decodedMessage = cast(string)decodedMessageBytes;
+
+    assert(cmp(message, decodedMessage) == 0);
+}
