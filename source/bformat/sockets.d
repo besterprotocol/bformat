@@ -3,11 +3,16 @@ module bformat.sockets;
 import std.socket : Socket, SocketFlags, MSG_WAITALL;
 
 /** 
- * 
+ * Receives a message from the provided socket
+ * by decoding the streamed bytes into bformat
+ * and finally placing the resulting payload in
+ * the provided array
+ *
  * Params:
- *   originator = 
- *   receiveMessage = 
- * Returns: 
+ *   originator = the socket to receive from
+ *   receiveMessage = the nbuffer to receive into
+ *
+ * Returns: true if the receive succeeded, false otheriwse
  */
 public bool receiveMessage(Socket originator, ref byte[] receiveMessage)
 {
