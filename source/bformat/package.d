@@ -1,3 +1,6 @@
+/**
+ * bformat encoder/decoder
+ */
 module bformat;
 
 /**
