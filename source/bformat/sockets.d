@@ -43,65 +43,59 @@ public class BClient
 		/* Construct a buffer to receive into */
 		byte[] receiveBuffer;
 
-		bool status = true;
-
-
-		/* The amount of bytes received */
-		long bytesReceived;
-
 		/* Get the length of the message */
 		byte[4] messageLengthBytes;
-		bytesReceived = socket.receive(messageLengthBytes, cast(SocketFlags)MSG_WAITALL);
 
-		/* If there was an error reading from the socket */
-		if(!(bytesReceived > 0))
+		try
 		{
-			status =  false;
+			stream.readFully(messageLengthBytes);
 		}
-		/* If the receive was successful */
-		else
+		catch(StreamException streamErr)
 		{
-			/* Response message length */
-			uint messageLength;
-
-			/* Little endian version you simply read if off the bone (it's already in the correct order) */
-			version(LittleEndian)
-			{
-				messageLength = *cast(int*)messageLengthBytes.ptr;
-			}
-
-			/* Big endian requires we byte-sapped the little-endian encoded number */
-			version(BigEndian)
-			{
-				byte[] swappedLength;
-				swappedLength.length = 4;
-
-				swappedLength[0] = messageLengthBytes[3];
-				swappedLength[1] = messageLengthBytes[2];
-				swappedLength[2] = messageLengthBytes[1];
-				swappedLength[3] = messageLengthBytes[0];
-
-				messageLength = *cast(int*)swappedLength.ptr;
-			}
-
-
-			/* Read the full message */
-			receiveBuffer.length = messageLength;
-			bytesReceived = socket.receive(receiveBuffer, cast(SocketFlags)MSG_WAITALL);
-
 			/* If there was an error reading from the socket */
-			if(!(bytesReceived > 0))
-			{
-				status = false;
-			}
-			/* If there was no error receiving the message */
-			else
-			{
-				receiveMessage = receiveBuffer;
-			}
+			return false;
 		}
 
-		return status;
+
+		/* Response message length */
+		uint messageLength;
+
+		/* Little endian version you simply read if off the bone (it's already in the correct order) */
+		version(LittleEndian)
+		{
+			messageLength = *cast(int*)messageLengthBytes.ptr;
+		}
+
+		/* Big endian requires we byte-sapped the little-endian encoded number */
+		version(BigEndian)
+		{
+			byte[] swappedLength;
+			swappedLength.length = 4;
+
+			swappedLength[0] = messageLengthBytes[3];
+			swappedLength[1] = messageLengthBytes[2];
+			swappedLength[2] = messageLengthBytes[1];
+			swappedLength[3] = messageLengthBytes[0];
+
+			messageLength = *cast(int*)swappedLength.ptr;
+		}
+
+
+		/* Read the full message */
+		receiveBuffer.length = messageLength;
+		try
+		{
+			stream.readFully(receiveBuffer);
+			receiveMessage = receiveBuffer;
+
+			/* If there was no error receiving the message */
+			return true;
+		}
+		catch(StreamException streamErr)
+		{
+			/* If there was an error reading from the socket */
+			return false;
+		}
 	}
 
 	/** 
@@ -146,7 +140,7 @@ public class BClient
 		messageBuffer ~= cast(byte[])message;
 
 		/* Send the message */
-		long bytesSent = socket.send(messageBuffer);
+		long bytesSent = stream.writeFully(messageBuffer);
 
 		/* TODO: Compact this */
 		return bytesSent > 0;
