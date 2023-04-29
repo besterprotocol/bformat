@@ -139,11 +139,17 @@ public class BClient
 		/* Add the message to the buffer */
 		messageBuffer ~= cast(byte[])message;
 
-		/* Send the message */
-		long bytesSent = stream.writeFully(messageBuffer);
-
-		/* TODO: Compact this */
-		return bytesSent > 0;
+		try
+		{
+			/* Send the message */
+			stream.writeFully(messageBuffer);
+			
+			return true;
+		}
+		catch(StreamException streamError)
+		{
+			return false;
+		}
 	}
 
 }
