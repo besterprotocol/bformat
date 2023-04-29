@@ -7,7 +7,7 @@ module bformat;
  * Encodes the provided message into the bformat format
  * and sends it over the provided socket
  */
-public import bformat.sockets : sendMessage;
+public import bformat.sockets : BClient;
 
 /**
  * Receives a message from the provided socket
@@ -15,7 +15,7 @@ public import bformat.sockets : sendMessage;
  * and finally placing the resulting payload in
  * the provided array
  */
-public import bformat.sockets : receiveMessage;
+// public import bformat.sockets : receiveMessage;
 
 /**
  * Encodes the provided message into the bformat format
