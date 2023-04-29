@@ -3,19 +3,27 @@
  */
 module bformat.sockets;
 
-import std.socket : Socket, SocketFlags, MSG_WAITALL;
+import std.socket : Socket;
+import river.core;
+import river.impls.sock : SockStream;
 
 public class BClient
 {
 	/** 
-	 * Underlying socket
+	 * Underlying stream
 	 */
-	private Socket socket;
+	private Stream stream;
 
 	// TODO: comment
 	this(Socket socket)
 	{
-		this.socket = socket;
+		this(new SockStream(socket));
+	}
+
+	// TODO: Comment
+	this(Stream stream)
+	{
+		this.stream = stream;
 	}
 
 	/** 
