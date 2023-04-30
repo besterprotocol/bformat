@@ -4,7 +4,7 @@
 	],
 	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
-	"description": "bformat socket writer and reader",
+	"description": "Bformat message encoder/decoder for streams and sockets",
 	"license": "LGPL v3",
 	"name": "bformat",
 	"targetType": "library"
