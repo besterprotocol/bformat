@@ -1,12 +1,16 @@
 /** 
  * Socket encoding/decoding functions
  */
-module bformat.sockets;
+module bformat.client;
 
 import std.socket : Socket;
 import river.core;
 import river.impls.sock : SockStream;
 
+/** 
+ * Bformat client to encode and decode via a
+ * `Socket` or river-based `Stream`
+ */
 public class BClient
 {
 	/** 

@@ -4,18 +4,11 @@
 module bformat;
 
 /**
- * Encodes the provided message into the bformat format
- * and sends it over the provided socket
+ * Provides a client which consumes a stream
+ * which can encode and decode messages to
+ * and from it
  */
-public import bformat.sockets : BClient;
-
-/**
- * Receives a message from the provided socket
- * by decoding the streamed bytes into bformat
- * and finally placing the resulting payload in
- * the provided array
- */
-// public import bformat.sockets : receiveMessage;
+public import bformat.client : BClient;
 
 /**
  * Encodes the provided message into the bformat format
