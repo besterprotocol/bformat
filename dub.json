@@ -6,7 +6,7 @@
 	"dependencies": {
 		"river": "~>0.3.6"
 	},
-	"description": "bformat socket writer and reader",
+	"description": "Bformat message encoder/decoder for streams and sockets",
 	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"license": "LGPL v3",
 	"name": "bformat",
