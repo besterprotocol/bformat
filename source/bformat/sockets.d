@@ -130,3 +130,61 @@ public class BClient
 	}
 
 }
+
+version(unittest)
+{
+	import std.socket;
+	import core.thread;
+	import std.stdio;
+}
+
+unittest
+{
+	// TODO: Add a socket unit test here
+
+	UnixAddress unixAddr = new UnixAddress("/tmp/bformatServer.sock");
+
+	scope(exit)
+	{
+		import std.stdio;
+		remove(cast(char*)unixAddr.path());
+	}
+
+	Socket serverSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
+	serverSocket.bind(unixAddr);
+	serverSocket.listen(0);
+
+	class ServerThread : Thread
+	{
+		private Socket servSock;
+
+		this(Socket servSock)
+		{
+			this.servSock = servSock;
+			super(&worker);
+		}
+
+		private void worker()
+		{
+			Socket clientSock = servSock.accept();
+
+			BClient bClient = new BClient(clientSock);
+
+			byte[] message = cast(byte[])"ABBA";
+			bClient.sendMessage(message);
+		}
+	}
+
+	Thread serverThread = new ServerThread(serverSocket);
+	serverThread.start();
+
+	Socket client = new Socket(AddressFamily.UNIX, SocketType.STREAM);
+	client.connect(unixAddr);
+	BClient bClient = new BClient(client);
+
+	byte[] receivedMessage;
+	bClient.receiveMessage(receivedMessage);
+	assert(receivedMessage == "ABBA");
+	writeln(receivedMessage);
+	writeln(cast(string)receivedMessage);
+}
