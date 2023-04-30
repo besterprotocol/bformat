@@ -6,7 +6,7 @@
 	"dependencies": {
 		"river": "~>0.3.6"
 	},
-	"description": "Bformat message encoder/decoder for streams and sockets",
+	"description": "A simple message format for automatically length-prefixing messages over any socket or stream",
 	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"license": "LGPL v3",
 	"name": "bformat",
