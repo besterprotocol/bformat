@@ -18,13 +18,25 @@ public class BClient
 	 */
 	private Stream stream;
 
-	// TODO: comment
+	/** 
+	 * Constructs a new `BClient` for encoding and decoding
+	 * to and from the provided `Socket`
+	 *
+	 * Params:
+	 *   socket = the `Socket` to use for writing and reading
+	 */
 	this(Socket socket)
 	{
 		this(new SockStream(socket));
 	}
 
-	// TODO: Comment
+	/** 
+	 * Constructs a new `BClient` for encoding and decoding
+	 * to and from the provided river-based `Stream`
+	 *
+	 * Params:
+	 *   stream = the `Stream` to use for writing and reading
+	 */
 	this(Stream stream)
 	{
 		this.stream = stream;
