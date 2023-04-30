@@ -145,6 +145,14 @@ public class BClient
 		}
 	}
 
+	/** 
+	 * Closes the client
+	 */
+	public void close()
+	{
+		/* Close the underlying stream */
+		stream.close();
+	}
 }
 
 version(unittest)
@@ -206,4 +214,6 @@ unittest
 	assert(receivedMessage == "ABBA");
 	writeln(receivedMessage);
 	writeln(cast(string)receivedMessage);
+
+	bClient.close();
 }
