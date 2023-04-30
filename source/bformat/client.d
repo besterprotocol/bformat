@@ -154,10 +154,13 @@ version(unittest)
 	import std.stdio;
 }
 
+/**
+ * Create a server that encodes a message to the client
+ * and then let the client decode it from us; both making
+ * use of `BClient` to accomplish this
+ */
 unittest
 {
-	// TODO: Add a socket unit test here
-
 	UnixAddress unixAddr = new UnixAddress("/tmp/bformatServer.sock");
 
 	scope(exit)
