@@ -2,9 +2,12 @@
 	"authors": [
 		"Tristan B. Velloza Kildaire"
 	],
-	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
-	"description": "Bformat message encoder/decoder for streams and sockets",
+	"dependencies": {
+		"river": "~>0.3.6"
+	},
+	"description": "bformat socket writer and reader",
+	"homepage": "https://deavmi.assigned.network/projects/bformat/",
 	"license": "LGPL v3",
 	"name": "bformat",
 	"targetType": "library"
