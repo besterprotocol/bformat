@@ -20,4 +20,4 @@ Just run the command `dub add bformat`.
 
 When using the library you will want to use the two functions provided `sendMessage(Socket, byte[])` and `receiveMessage(Socket, ref byte[])`. These two functions allow you to send data and have it encoded into the bformat format and receive data and interpret the received bformat format such that the correct length of data can read.
 
-And then you can take a look at the [source code documentation](https://bformat.dpldocs.info/v3.1.18/) here on the functions the library provides and how to use them.
+And then you can take a look at the [source code documentation](https://bformat.dpldocs.info/index.html) here on the functions the library provides and how to use them.
