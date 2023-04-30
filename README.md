@@ -7,17 +7,74 @@ A simple message format for automatically length-prefixing messages over any [`S
 
 ## What is bformat?
 
-bformat is simply a format and a library that allows one to prefix their messages with a length field such that it can be retrieved on the other side over a socket that is opened in a STREAM mode. It simply manages a socket's I/O stream such that the first 4 bytes are read as the length and then the preceding bytes are read accordingly. Rather than duplicate this sort of logic in all the code I wrote ever for my networking projects, I decided to make it a library as it would reduce the amount of duplicate code and also allow code re-use of something I could change or optimize later.
+bformat makes it easy to build applications whereby you want to send data over a streaming interface (either a `Socket` opened in `SocketType.STREAM` mode or a River-based `Stream`) and want to be able to read the data as length-prefixed messages, without the hassle of implementing this yourself. This is whwre bformat shines by providing support for this in a cross-platform manner so you do not have to worry aboutimplementing it yourself countless times again everytime you require such functionality in a project.
 
-It's also cross-platform and does all the byte-swapping endianess goodness you'd need - so you need not worry about that.
+## Usage
 
+You can see the [API](https://bformat.dpldocs.info/index.html) for information on how to use it but it boils down to spawning a new [`BClient`](https://bformat.dpldocs.info/bformat.client.BClient.html) which takes in either a `Socket` of `Stream` (see [River](https://river.dpldocs.info/river.html)) and then you can either send data using [`sendMessage(byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.sendMessage.html) and receive using [`receiveMessage(ref byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.receiveMessage.html).
 
-## Want to use it in your project?
+Below we have an example application which does just this:
 
-It's rather easy to add it to your D project (so far I have only implemented this in DLang as that is where I need it). 
+```d
+/**
+ * Create a server that encodes a message to the client
+ * and then let the client decode it from us; both making
+ * use of `BClient` to accomplish this
+ */
+unittest
+{
+	UnixAddress unixAddr = new UnixAddress("/tmp/bformatServer.sock");
 
-Just run the command `dub add bformat`.
+	scope(exit)
+	{
+		import std.stdio;
+		remove(cast(char*)unixAddr.path());
+	}
 
-When using the library you will want to use the two functions provided `sendMessage(Socket, byte[])` and `receiveMessage(Socket, ref byte[])`. These two functions allow you to send data and have it encoded into the bformat format and receive data and interpret the received bformat format such that the correct length of data can read.
+	Socket serverSocket = new Socket(AddressFamily.UNIX, SocketType.STREAM);
+	serverSocket.bind(unixAddr);
+	serverSocket.listen(0);
 
-And then you can take a look at the [source code documentation](https://bformat.dpldocs.info/index.html) here on the functions the library provides and how to use them.
+	class ServerThread : Thread
+	{
+		private Socket servSock;
+
+		this(Socket servSock)
+		{
+			this.servSock = servSock;
+			super(&worker);
+		}
+
+		private void worker()
+		{
+			Socket clientSock = servSock.accept();
+
+			BClient bClient = new BClient(clientSock);
+
+			byte[] message = cast(byte[])"ABBA";
+			bClient.sendMessage(message);
+		}
+	}
+
+	Thread serverThread = new ServerThread(serverSocket);
+	serverThread.start();
+
+	Socket client = new Socket(AddressFamily.UNIX, SocketType.STREAM);
+	client.connect(unixAddr);
+	BClient bClient = new BClient(client);
+
+	byte[] receivedMessage;
+	bClient.receiveMessage(receivedMessage);
+	assert(receivedMessage == "ABBA");
+	writeln(receivedMessage);
+	writeln(cast(string)receivedMessage);
+}
+```
+
+### Adding to your peoject
+
+It's rather easy to add it to your D project, just run the command `dub add bformat`.
+
+## License
+
+The license used is LGPL v3.
