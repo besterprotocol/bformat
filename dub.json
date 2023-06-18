@@ -4,7 +4,7 @@
 	],
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
 	"dependencies": {
-		"river": "~>0.3.6"
+		"river": ">=0.3.6"
 	},
 	"description": "A simple message format for automatically length-prefixing messages over any socket or stream",
 	"homepage": "https://deavmi.assigned.network/projects/bformat/",
