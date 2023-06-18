@@ -11,7 +11,7 @@ bformat makes it easy to build applications whereby you want to send data over a
 
 ## Usage
 
-You can see the [API](https://bformat.dpldocs.info/index.html) for information on how to use it but it boils down to spawning a new [`BClient`](https://bformat.dpldocs.info/bformat.client.BClient.html) which takes in either a `Socket` of `Stream` (see [River](https://river.dpldocs.info/river.html)) and then you can either send data using [`sendMessage(byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.sendMessage.html) and receive using [`receiveMessage(ref byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.receiveMessage.html).
+You can see the [API](https://bformat.dpldocs.info/index.html) for information on how to use it but it boils down to spawning a new [`BClient`](https://bformat.dpldocs.info/bformat.client.BClient.html) which takes in either a `Socket` or `Stream` (see [River](https://river.dpldocs.info/river.html)) and then you can either send data using [`sendMessage(byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.sendMessage.html) and receive using [`receiveMessage(ref byte[])`](https://bformat.dpldocs.info/bformat.client.BClient.receiveMessage.html).
 
 Below we have an example application which does just this:
 
