@@ -7,7 +7,7 @@ A simple message format for automatically length-prefixing messages over any [`S
 
 ## What is bformat?
 
-bformat makes it easy to build applications whereby you want to send data over a streaming interface (either a `Socket` opened in `SocketType.STREAM` mode or a River-based `Stream`) and want to be able to read the data as length-prefixed messages, without the hassle of implementing this yourself. This is whwre bformat shines by providing support for this in a cross-platform manner so you do not have to worry aboutimplementing it yourself countless times again everytime you require such functionality in a project.
+bformat makes it easy to build applications whereby you want to send data over a streaming interface (either a `Socket` opened in `SocketType.STREAM` mode or a River-based `Stream`) and want to be able to read the data as length-prefixed messages, without the hassle of implementing this yourself. This is where bformat shines by providing support for this in a cross-platform manner so you do not have to worry about implementing it yourself countless times again every time you require such functionality in a project.
 
 ## Usage
 
