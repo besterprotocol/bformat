@@ -4,6 +4,7 @@
 	],
 	"copyright": "Copyright © 2023, Tristan B. Kildaire",
 	"dependencies": {
+		"niknaks": ">=0.1.0",
 		"river": ">=0.3.6"
 	},
 	"description": "A simple message format for automatically length-prefixing messages over any socket or stream",
