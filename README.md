@@ -2,7 +2,7 @@ bformat
 =======
 
 
-[![D](https://github.com/besterprotocol/bformat/actions/workflows/d.yml/badge.svg)](https://github.com/besterprotocol/bformat/actions/workflows/d.yml) ![DUB](https://img.shields.io/dub/v/bformat?color=%23c10000ff%20&style=flat-square) ![DUB](https://img.shields.io/dub/dt/bformat?style=flat-square) ![DUB](https://img.shields.io/dub/l/bformat?style=flat-square) [![D](https://github.com/besterprotocol/bformat/actions/workflows/d.yml/badge.svg)](https://github.com/besterprotocol/bformat/actions/workflows/d.yml) [![Coverage Status](https://coveralls.io/repos/github/besterprotocol/bformat/badge.svg?branch=master)](https://coveralls.io/github/besterprotocol/bformat?branch=master)
+[![D](https://github.com/besterprotocol/bformat/actions/workflows/d.yml/badge.svg)](https://github.com/besterprotocol/bformat/actions/workflows/d.yml) ![DUB](https://img.shields.io/dub/v/bformat?color=%23c10000ff%20&style=flat-square) ![DUB](https://img.shields.io/dub/dt/bformat?style=flat-square) ![DUB](https://img.shields.io/dub/l/bformat?style=flat-square) [![Coverage Status](https://coveralls.io/repos/github/besterprotocol/bformat/badge.svg?branch=master)](https://coveralls.io/github/besterprotocol/bformat?branch=master)
 
 A simple message format for automatically length-prefixing messages over any [`Socket`](https://dlang.org/phobos/std_socket.html#.Socket) or [River-based](https://github.com/deavmi/river) [`Stream`](https://river.dpldocs.info/river.core.stream.Stream.html).
 
