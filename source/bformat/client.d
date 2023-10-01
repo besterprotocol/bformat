@@ -6,6 +6,7 @@ module bformat.client;
 import std.socket : Socket;
 import river.core;
 import river.impls.sock : SockStream;
+import niknaks.bits : bytesToIntegral, order, Order;
 
 /** 
  * Bformat client to encode and decode via a
@@ -76,27 +77,9 @@ public class BClient
 		/* Response message length */
 		uint messageLength;
 
-		/* Little endian version you simply read if off the bone (it's already in the correct order) */
-		version(LittleEndian)
-		{
-			messageLength = *cast(int*)messageLengthBytes.ptr;
-		}
-
-		/* Big endian requires we byte-sapped the little-endian encoded number */
-		version(BigEndian)
-		{
-			byte[] swappedLength;
-			swappedLength.length = 4;
-
-			swappedLength[0] = messageLengthBytes[3];
-			swappedLength[1] = messageLengthBytes[2];
-			swappedLength[2] = messageLengthBytes[1];
-			swappedLength[3] = messageLengthBytes[0];
-
-			messageLength = *cast(int*)swappedLength.ptr;
-		}
-
-
+		/* Order the bytes into Little endian (only flips if host order doesn't match LE) */
+		messageLength = order(bytesToIntegral!(uint)(cast(ubyte[])messageLengthBytes), Order.LE);
+		
 		/* Read the full message */
 		receiveBuffer.length = messageLength;
 		try

@@ -3,6 +3,8 @@
  */
 module bformat.marshall;
 
+import niknaks.bits : toBytes, bytesToIntegral, order, Order;
+
 /** 
  * Decodes the provided bformat message into the
  * message itself
@@ -22,25 +24,8 @@ public byte[] decodeMessage(byte[] bformatBytes)
 	/* Response message length */
 	uint messageLength;
 
-	/* Little endian version you simply read if off the bone (it's already in the correct order) */
-	version(LittleEndian)
-	{
-		messageLength = *cast(int*)messageLengthBytes.ptr;
-	}
-
-	/* Big endian requires we byte-sapped the little-endian encoded number */
-	version(BigEndian)
-	{
-		byte[] swappedLength;
-		swappedLength.length = 4;
-
-		swappedLength[0] = messageLengthBytes[3];
-		swappedLength[1] = messageLengthBytes[2];
-		swappedLength[2] = messageLengthBytes[1];
-		swappedLength[3] = messageLengthBytes[0];
-
-		messageLength = *cast(int*)swappedLength.ptr;
-	}
+	/* Order the bytes into Little endian (only flips if host order doesn't match LE) */
+	messageLength = order(bytesToIntegral!(uint)(cast(ubyte[])messageLengthBytes), Order.LE);
 
 
 	/* Read the full message */
@@ -62,27 +47,7 @@ public byte[] encodeBformat(byte[] message)
 	byte[] messageBuffer;
 
 	/* Encode the 4 byte message length header (little endian) */
-	int payloadLength = cast(int)message.length;
-	byte* lengthBytes = cast(byte*)&payloadLength;
-
-	/* On little endian simply get the bytes as is (it would be encoded as little endian) */
-	version(LittleEndian)
-	{
-		messageBuffer ~= *(lengthBytes+0);
-		messageBuffer ~= *(lengthBytes+1);
-		messageBuffer ~= *(lengthBytes+2);
-		messageBuffer ~= *(lengthBytes+3);
-	}
-
-	/* On Big Endian you must swap the big-endian-encoded number to be in little endian ordering */
-	version(BigEndian)
-	{
-		messageBuffer ~= *(lengthBytes+3);
-		messageBuffer ~= *(lengthBytes+2);
-		messageBuffer ~= *(lengthBytes+1);
-		messageBuffer ~= *(lengthBytes+0);
-	}
-	
+	messageBuffer ~= cast(byte[])toBytes(order(cast(int)message.length, Order.LE));
 
 	/* Add the message to the buffer */
 	messageBuffer ~= cast(byte[])message;
